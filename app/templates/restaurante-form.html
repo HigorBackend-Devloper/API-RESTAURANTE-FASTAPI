@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% set pagina = 'restaurantes' %}
+{% set editando = restaurante is defined and restaurante %}
+{% set valores = formulario if formulario is defined else (restaurante if editando else {}) %}
+{% block title %}{{ 'Editar' if editando else 'Cadastrar' }} restaurante{% endblock %}
+{% block content %}
+<a class="back-link" href="/restaurantes">← Voltar aos restaurantes</a>
+<div class="page-heading"><div><h1>{{ 'Editar' if editando else 'Cadastrar' }} restaurante</h1><p>{{ 'Mantenha as informações do restaurante atualizadas.' if editando else 'Preencha as informações para adicionar um restaurante.' }}</p></div></div>
+<form class="panel form-panel" action="{{ '/restaurantes/' ~ restaurante.id ~ '/editar' if editando else '/restaurantes' }}" method="post">
+  {% if csrf_token %}<input type="hidden" name="csrf_token" value="{{ csrf_token }}">{% endif %}
+  <h2>Informações do restaurante</h2><p class="form-note">Todos os campos são obrigatórios.</p>
+  <div class="field"><label for="nome">Nome</label><input id="nome" name="nome" value="{{ valores.nome | default('') }}" required maxlength="120" autocomplete="organization" placeholder="Nome do restaurante"></div>
+  <div class="field"><label for="categoria">Categoria</label><input id="categoria" name="categoria" value="{{ valores.categoria | default('') }}" required maxlength="80" placeholder="Informe a categoria"></div>
+  <div class="field"><label for="ativo">Situação</label><select id="ativo" name="ativo" required aria-describedby="status-ajuda"><option value="true" {% if valores.ativo | default(true) %}selected{% endif %}>Ativo</option><option value="false" {% if not (valores.ativo | default(true)) %}selected{% endif %}>Inativo</option></select><small id="status-ajuda">Indique se o restaurante está em atividade.</small></div>
+  <div class="form-actions"><button class="button primary" type="submit">{{ 'Salvar alterações' if editando else 'Cadastrar restaurante' }}</button><a class="button secondary" href="{{ '/restaurantes/' ~ restaurante.id if editando else '/restaurantes' }}">Cancelar</a></div>
+</form>
+{% endblock %}

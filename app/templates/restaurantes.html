@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% set pagina = 'restaurantes' %}
+{% block title %}Restaurantes{% endblock %}
+{% block content %}
+<div class="page-heading"><div><h1>Restaurantes</h1><p>Encontre, organize e acompanhe seus cadastros.</p></div><a class="button primary" href="/restaurantes/novo">Cadastrar restaurante</a></div>
+<section class="panel">
+  <form class="filters" action="/restaurantes" method="get" role="search">
+    <div class="field grow"><label for="busca">Buscar por nome</label><input type="search" id="busca" name="busca" value="{{ busca | default('') }}" placeholder="Nome do restaurante"></div>
+    <div class="field"><label for="status">Situação</label><select id="status" name="status"><option value="">Todas</option value="ativo" {% if status == 'ativo' %}selected{% endif %}>Ativos</option><option value="inativo" {% if status == 'inativo' %}selected{% endif %}>Inativos</option></select></div>
+    <button class="button primary" type="submit">Buscar</button><a class="button secondary" href="/restaurantes">Limpar</a>
+  </form>
+  {% if restaurantes %}
+  <div class="table-wrap"><table><caption class="sr-only">Restaurantes encontrados</caption><thead><tr><th scope="col">Restaurante</th><th scope="col">Categoria</th><th scope="col">Situação</th><th scope="col">Ações</th></tr></thead><tbody>
+  {% for restaurante in restaurantes %}<tr><th scope="row"><a href="/restaurantes/{{ restaurante.id }}">{{ restaurante.nome }}</a></th><td>{{ restaurante.categoria }}</td><td><span class="badge {{ 'active' if restaurante.ativo else 'inactive' }}">{{ 'Ativo' if restaurante.ativo else 'Inativo' }}</span></td><td><div class="row-actions"><a href="/restaurantes/{{ restaurante.id }}">Detalhes<span class="sr-only"> de {{ restaurante.nome }}</span></a><a href="/restaurantes/{{ restaurante.id }}/editar">Editar<span class="sr-only"> {{ restaurante.nome }}</span></a></div></td></tr>{% endfor %}
+  </tbody></table></div>
+  {% else %}<div class="empty"><h2>{{ 'Nenhum resultado encontrado' if busca or status else 'Nenhum restaurante cadastrado' }}</h2><p>{{ 'Experimente outro nome ou remova os filtros.' if busca or status else 'Adicione seu primeiro restaurante para começar.' }}</p><a class="button secondary" href="{{ '/restaurantes' if busca or status else '/restaurantes/novo' }}">{{ 'Limpar filtros' if busca or status else 'Cadastrar restaurante' }}</a></div>{% endif %}
+</section>
+{% endblock %}

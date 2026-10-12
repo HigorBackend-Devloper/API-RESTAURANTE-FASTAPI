@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# Banco de dados local (criado automaticamente ao iniciar a aplicação)
+*.db
+
+# Ambiente
+.env
+
+# Editor / SO
+.vscode/
+.idea/
+.DS_Store

@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% set pagina = 'restaurantes' %}
+{% block title %}{{ restaurante.nome if restaurante else 'Restaurante não encontrado' }}{% endblock %}
+{% block content %}
+<a class="back-link" href="/restaurantes">← Voltar aos restaurantes</a>
+{% if restaurante %}
+<div class="page-heading"><div><h1>{{ restaurante.nome }}</h1><p>Informações e gerenciamento do restaurante.</p></div><a class="button primary" href="/restaurantes/{{ restaurante.id }}/editar">Editar restaurante</a></div>
+<section class="panel detail-panel"><h2>Dados do restaurante</h2><dl><div><dt>Nome</dt><dd>{{ restaurante.nome }}</dd></div><div><dt>Categoria</dt><dd>{{ restaurante.categoria }}</dd></div><div><dt>Situação</dt><dd><span class="badge {{ 'active' if restaurante.ativo else 'inactive' }}">{{ 'Ativo' if restaurante.ativo else 'Inativo' }}</span></dd></div></dl>
+<form action="/restaurantes/{{ restaurante.id }}/status" method="post">{% if csrf_token %}<input type="hidden" name="csrf_token" value="{{ csrf_token }}">{% endif %}<input type="hidden" name="ativo" value="{{ 'false' if restaurante.ativo else 'true' }}"><button class="button secondary" type="submit">{{ 'Desativar' if restaurante.ativo else 'Ativar' }} restaurante</button></form></section>
+<section class="panel danger-zone"><div><h2>Excluir restaurante</h2><p>A exclusão é permanente. Confira o cadastro antes de continuar.</p></div><form action="/restaurantes/{{ restaurante.id }}/excluir" method="post" data-confirm="Excluir este restaurante permanentemente?">{% if csrf_token %}<input type="hidden" name="csrf_token" value="{{ csrf_token }}">{% endif %}<label class="confirm-check"><input type="checkbox" required name="confirmar_exclusao" value="true">Confirmo a exclusão deste restaurante</label><button class="button danger" type="submit">Excluir restaurante</button></form></section>
+{% else %}<section class="panel empty"><h1>Restaurante não encontrado</h1><p>Volte à listagem para selecionar um restaurante.</p><a class="button primary" href="/restaurantes">Ver restaurantes</a></section>{% endif %}
+{% endblock %}

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Painel{% endblock %} | Restaurante Manager</title>
+  <link rel="stylesheet" href="/static/css/style.css?v=restaurante-manager-1">
+  <script src="/static/js/main.js?v=restaurante-manager-1" defer></script>
+</head>
+
+<body>
+  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+  <aside class="sidebar">
+    <a class="brand" href="/"><span class="brand-mark"
+        aria-hidden="true">rm</span><span>Restaurante<strong>Manager</strong></span></a>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="navegacao">Menu</button>
+    <nav id="navegacao" aria-label="Navegação principal">
+      <a href="/" {% if pagina=='inicio' %}aria-current="page" {% endif %}>Visão geral</a>
+      <a href="/restaurantes" {% if pagina=='restaurantes' %}aria-current="page" {% endif %}>Restaurantes</a>
+      {% if usuario %}
+      <div class="nav-account">
+        <span>Olá, {{ usuario.nome }}</span>
+
+        <form action="/logout" method="post">
+          {% if csrf_token %}<input type="hidden" name="csrf_token" value="{{ csrf_token }}">{% endif %}
+          <button class="button quiet" type="submit">
+            Sair da conta
+          </button>
+        </form>
+      </div>
+      {% else %}
+      <a href="/login">Entrar</a>
+
+      <a href="/registro" {% if pagina=='registro' %}aria-current="page" {% endif %}>
+        Criar conta
+      </a>
+      {% endif %}
+    </nav>
+    <p class="sidebar-note">Organização para servir melhor.</p>
+  </aside>
+  <main id="conteudo" tabindex="-1">
+    <header class="topbar"><span>Seu espaço de gestão</span><span>{% if usuario %}Olá, {{ usuario.nome }}{% else %}Restaurante Manager{% endif %}</span></header>
+    <div class="page">
+      {% if mensagem %}<div class="notice" role="status">{{ mensagem }}</div>{% endif %}
+      {% if erro %}<div class="notice error" role="alert">{{ erro }}</div>{% endif %}
+      {% if erros %}<div class="notice error" role="alert">
+        <ul>{% for item in erros %}<li>{{ item }}</li>{% endfor %}</ul>
+      </div>{% endif %}
+      {% block content %}{% endblock %}
+    </div>
+    <footer>Restaurante Manager · Tudo em seu lugar.</footer>
+  </main>
+</body>
+
+</html>

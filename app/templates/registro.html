@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% set pagina = 'registro' %}
+{% block title %}Criar conta{% endblock %}
+{% block content %}
+<section class="auth-layout"><div class="auth-intro"><span class="brand-mark large" aria-hidden="true">rm</span><h1>Mais organização<br>à mesa.</h1><p>Crie sua conta e comece a cuidar dos seus restaurantes.</p></div>
+<form class="panel form-panel" action="/registro" method="post">
+  {% if csrf_token %}<input type="hidden" name="csrf_token" value="{{ csrf_token }}">{% endif %}
+  <h2>Criar sua conta</h2><p>Preencha todos os campos para se cadastrar.</p>
+  <div class="field"><label for="nome">Nome</label><input id="nome" name="nome" value="{{ nome | default('') }}" required autocomplete="name" maxlength="120"></div>
+  <div class="field"><label for="email">E-mail</label><input id="email" name="email" type="email" value="{{ email | default('') }}" required autocomplete="email" maxlength="254"></div>
+  <div class="field"><label for="senha">Senha</label><div class="password-field"><input id="senha" name="senha" type="password" required autocomplete="new-password"><button type="button" data-password="senha" aria-controls="senha" aria-pressed="false" hidden>Mostrar senha</button></div></div>
+  <div class="field"><label for="confirmar_senha">Confirmar senha</label><input id="confirmar_senha" name="confirmar_senha" type="password" required autocomplete="new-password"></div>
+  <button class="button primary full" type="submit">Criar conta</button><p class="auth-switch">Já tem conta? <a href="/login">Entrar</a></p>
+</form></section>
+{% endblock %}

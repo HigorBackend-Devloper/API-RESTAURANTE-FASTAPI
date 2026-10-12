@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% set pagina = 'inicio' %}
+{% block title %}Visão geral{% endblock %}
+{% block content %}
+<section class="welcome">
+  <div>
+    <p class="eyebrow">Visão geral</p>
+    <h1>Uma boa gestão<br>começa por aqui.</h1>
+    <p>Acompanhe seus restaurantes e mantenha cada detalhe organizado.</p>
+  </div>
+  <a class="button primary" href="/restaurantes/novo">Cadastrar restaurante</a>
+</section>
+<section class="stats" aria-label="Resumo dos restaurantes">
+  <div><span>Restaurantes cadastrados</span><strong>{{ total_restaurantes if total_restaurantes is defined else '—'
+      }}</strong></div>
+  <div><span>Em atividade</span><strong>{{ total_ativos if total_ativos is defined else '—' }}</strong></div>
+  <div><span>Desativados</span><strong>{{ total_inativos if total_inativos is defined else '—' }}</strong></div>
+</section>
+<section class="panel">
+  <div class="section-heading">
+    <div>
+      <h2>Seus restaurantes</h2>
+      <p>Acesse os detalhes e atualize os cadastros.</p>
+    </div><a href="/restaurantes">Ver todos</a>
+  </div>
+  {% if restaurantes %}
+  <ul class="restaurant-list">{% for restaurante in restaurantes %}<li>
+      <div><a href="/restaurantes/{{ restaurante.id }}">{{ restaurante.nome }}</a>
+        <p>{{ restaurante.categoria }}</p>
+      </div><span class="badge {{ 'active' if restaurante.ativo else 'inactive' }}">{{ 'Ativo' if restaurante.ativo else
+        'Inativo' }}</span>
+    </li>{% endfor %}</ul>
+  {% else %}
+  <div class="empty"><span class="empty-symbol" aria-hidden="true">＋</span>
+    <h3>Seu próximo restaurante começa aqui</h3>
+    <p>Cadastre um restaurante para acompanhar suas informações neste painel.</p><a class="button secondary"
+      href="/restaurantes/novo">Cadastrar primeiro restaurante</a>
+  </div>
+  {% endif %}
+</section>
+{% endblock %}
